@@ -1,0 +1,69 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link href="../static/css/bootstrap.css" rel="stylesheet" th:href="@{/css/bootstrap.css}"/>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css"
+          integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+    <link href="../static/css/jquery-ui.css" rel="stylesheet" th:href="@{/css/jquery-ui.css}"/>
+    <link href="../static/css/jquery-ui.structure.css" rel="stylesheet" th:href="@{/css/jquery-ui.structure.css}"/>
+    <link href="../static/css/jquery-ui.theme.css" rel="stylesheet" th:href="@{/css/jquery-ui.theme.css}"/>
+</head>
+<body>
+<div class="container-fluid">
+    <h1>Date Comparison</h1>
+    <strong th:if="${invalidComparison}" >
+        <div th:text="#{error.invalidComparisonErrorMessage}"
+             class="ui-state-error ui-state-error-text"></div>
+    </strong>
+    <strong th:if="${errorMessage}" >
+        <div th:utext="${errorMessage}" class="ui-state-error ui-state-error-text"></div>
+    </strong>
+    <form th:action="@{/compareDate}"
+          th:object="${dateForm}" method="POST">
+
+        <div class="form-group">
+            <label for="startDate">Start Date</label>
+            <input type="text" th:field="*{startDate}" id="startDate" class="form-control"
+                   th:attr="placeholder=${placeholderDateFormat}" required/>
+        </div>
+        <div class="form-group">
+            <label for="endDate">End Date</label>
+            <input type="text" class="form-control" th:field="*{endDate}" id="endDate"
+                   th:attr="placeholder=${placeholderDateFormat}"
+                   required/>
+        </div>
+        <input type="submit" value="Compare" class="btn btn-outline-primary"/>
+    </form>
+
+    <br/>
+
+    <div th:if="${daysBetween > -1}" style="color:darkgreen;font-style:italic;" th:object="${dateForm}"> Number of days
+        between <span
+                th:utext="*{#temporals.format(startDate, '__${dateFormatConversion}__')}"/> and <span
+                th:utext="*{#temporals.format(endDate, '__${dateFormatConversion}__')}"/> is <span
+                th:utext="${daysBetween}"/>
+    </div>
+
+
+</div>
+
+
+<script src="/js/jquery.js"></script>
+<script src="/js/jquery-ui-1.12.1/jquery-ui.js" th:href="@{/js/jquery-ui-1.12.1/jquery-ui.js}"></script>
+<script src="/js/bootstrap.js" th:href="@{/js/bootstrap.js}"></script>
+<script>
+    $('#startDate').datepicker({
+        dateFormat: "[[${datepickerDateFormat}]]",
+        todayHighlight: true
+    });
+    $('#endDate').datepicker({
+        dateFormat: "[[${datepickerDateFormat}]]",
+        todayHighlight: true
+    });
+</script>
+</body>
+
+</html>
